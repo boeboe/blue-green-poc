@@ -45,7 +45,7 @@ get_mac_docker_ip() {
 
 # Function to get the container's IP on Linux
 get_linux_docker_ip() {
-  container_id=$(docker ps -q --filter "status=running" | head -n 1)
+  container_id=$(docker ps -q --filter "status=running" --filter "name=message-service" | head -n 1)
   if [ -z "$container_id" ]; then
     print_warning "No running Docker containers found."
     echo "localhost"
