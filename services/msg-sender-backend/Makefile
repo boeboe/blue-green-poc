@@ -1,7 +1,7 @@
 # HELP
 # This will output the help for each task
 # thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-.PHONY: help clean package run-local test-local docker-build run-docker stop-docker test-docker
+.PHONY: help clean package run-local test-local docker-build run-docker stop-docker test-docker check-updates
 
 .DEFAULT_GOAL := help
 
@@ -12,7 +12,7 @@ clean: ## Clean the project by removing target folder
 	mvn clean
 
 package: ## Package the project into a JAR file
-	mvn clean package
+	mvn clean package -U
 
 run-local: ## Run the Spring Boot application locally from JAR
 	mvn spring-boot:run -P run-local
@@ -48,3 +48,7 @@ stop-docker: ## Stop and remove the running Docker container
 test-docker: run-docker ## Run integration tests against the running Dockerized app
 	./test.sh
 	$(MAKE) stop-docker
+
+check-updates: ## Check for maven dependency updates
+	mvn versions:display-dependency-updates
+	mvn versions:display-plugin-updates
