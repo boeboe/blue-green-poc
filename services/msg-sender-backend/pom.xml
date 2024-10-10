@@ -22,6 +22,7 @@
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
     <exec-maven-plugin.version>3.4.1</exec-maven-plugin.version>
     <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
+    <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
   </properties>
 
   <parent>
@@ -152,6 +153,29 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
         <version>${versions-maven-plugin.version}</version>
+      </plugin>
+
+      <!-- Springdoc OpenAPI Maven Plugin -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <version>${springdoc-openapi-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- Output directory for the OpenAPI spec file -->
+          <outputDir>${project.build.directory}/openapi</outputDir>
+          <!-- Set the output format to YAML (default is JSON) -->
+          <apiDocsUrl>http://localhost:8080/api-docs</apiDocsUrl> <!-- Base URL for your API docs -->
+          <outputFileName>openapi.json</outputFileName>
+          <skip>false</skip>
+        </configuration>
       </plugin>
 
     </plugins>
