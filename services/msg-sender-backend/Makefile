@@ -25,13 +25,26 @@ docker-build: ## Build multi-platform Docker image
 	docker buildx build --platform linux/amd64,linux/arm64 --push -t boeboe/message-service:latest .
 
 run-docker: ## Run the Docker image locally on port 8080
-	docker run -d --name message-service -p 8080:8080 boeboe/message-service:latest
+	@if [ "$(shell docker ps -q -f name=message-service)" ]; then \
+		echo "Docker container 'message-service' is already running."; \
+	else \
+		echo "Starting Docker container 'message-service'..."; \
+		docker run -d --name message-service -p 8080:8080 boeboe/message-service:latest; \
+	fi
 
 stop-docker: ## Stop and remove the running Docker container
-	docker stop message-service && docker rm message-service
+	@if [ "$(shell docker ps -q -f name=message-service)" ]; then \
+		echo "Stopping and removing Docker container 'message-service'..."; \
+		docker stop message-service && docker rm message-service; \
+	else \
+		if [ "$(shell docker ps -a -q -f name=message-service)" ]; then \
+			echo "Removing stopped Docker container 'message-service'..."; \
+			docker rm message-service; \
+		else \
+			echo "Docker container 'message-service' is not running."; \
+		fi \
+	fi
 
 test-docker: run-docker ## Run integration tests against the running Dockerized app
-	@DOCKER_HOST_IP=$(shell docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' message-service) || { echo "Docker container not running. Exiting."; exit 1; } && \
-	echo "Running tests against Docker host at $$DOCKER_HOST_IP" && \
-	BASE_URL="http://$$DOCKER_HOST_IP" PORT=8080 ./test.sh || { echo "Tests failed. Stopping Docker container."; $(MAKE) stop-docker; exit 1; }
+	./test.sh
 	$(MAKE) stop-docker
