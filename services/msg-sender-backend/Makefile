@@ -1,7 +1,7 @@
 # HELP
 # This will output the help for each task
 # thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-.PHONY: help clean package run-local test-local docker-build run-docker stop-docker test-docker check-updates
+.PHONY: help clean package run-local test-local docker-build run-docker stop-docker test-docker check-updates generate-openapi
 
 .DEFAULT_GOAL := help
 
@@ -15,7 +15,7 @@ package: ## Package the project into a JAR file
 	mvn clean package -U
 
 run-local: ## Run the Spring Boot application locally from JAR
-	mvn spring-boot:run -P run-local
+	mvn spring-boot:run
 
 test-local: ## Run integration tests against local Spring Boot app
 	mvn test -Dapi.base.url=http://localhost -Dapi.port=8080
@@ -24,7 +24,7 @@ docker-build: ## Build multi-platform Docker image
 	mvn clean package -DskipTests
 	docker buildx build --platform linux/amd64,linux/arm64 --push -t boeboe/message-service:latest .
 
-run-docker: ## Run the Docker image locally on port 8080
+run-docker: docker-build ## Run the Docker image locally on port 8080
 	@if [ "$(shell docker ps -q -f name=message-service)" ]; then \
 		echo "Docker container 'message-service' is already running."; \
 	else \
@@ -52,3 +52,14 @@ test-docker: run-docker ## Run integration tests against the running Dockerized 
 check-updates: ## Check for maven dependency updates
 	mvn versions:display-dependency-updates
 	mvn versions:display-plugin-updates
+
+generate-openapi: ## Start Spring Boot, generate OpenAPI spec, then stop Spring Boot
+	@echo "Starting Spring Boot application..."
+	mvn spring-boot:run &
+	@echo "Waiting for Spring Boot app to start..."
+	sleep 10  # Optional: Adjust if needed for the app to fully start
+	@echo "Generating OpenAPI Spec..."
+	mvn springdoc-openapi:generate
+	@echo "Stopping Spring Boot application..."
+	mvn spring-boot:stop
+	@echo "Done."
