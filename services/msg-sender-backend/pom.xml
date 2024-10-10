@@ -15,7 +15,7 @@
     <java.version>17</java.version>
     <lombok.version>1.18.34</lombok.version>
     <rest-assured.version>5.5.0</rest-assured.version>
-    <jackson-databind.version>2.18.0</jackson-databind.version>
+    <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
 
     <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -65,7 +65,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson-databind.version}</version>
     </dependency>
 
     <!-- Spring Boot DevTools (optional for live reload) -->
@@ -74,6 +73,20 @@
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
+
+    <!-- Springdoc OpenAPI UI -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.6.0</version>
+    </dependency>
+
+    <!-- Thymeleaf for Static Pages -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -143,55 +156,5 @@
 
     </plugins>
   </build>
-
-  <profiles>
-    <!-- Profile to build the application JAR and run it locally -->
-    <profile>
-      <id>run-local</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>${exec-maven-plugin.version}</version>
-            <configuration>
-              <mainClass>net.liantis.messagesender.Application</mainClass>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!-- Profile to run the application in Docker -->
-    <profile>
-      <id>run-docker</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>${exec-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <executable>docker</executable>
-              <arguments>
-                <argument>run</argument>
-                <argument>--rm</argument>
-                <argument>-p</argument>
-                <argument>8080:8080</argument>
-                <argument>message-service:latest</argument>
-              </arguments>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
