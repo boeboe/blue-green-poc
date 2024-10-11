@@ -6,13 +6,20 @@
   </div>
   
   <ul *ngIf="messages.length > 0" class="message-list">
-    <li *ngFor="let message of messages" class="message-item">
-      <div class="message-content">
-        <strong>{{ message.topic }}:</strong> {{ message.message }}
+    <li *ngFor="let message of messages; let i = index" class="message-item" [class.expanded]="expandedIndex === i" (click)="toggleExpand(i)">
+      <div class="message-summary">
+        <strong>{{ message.topic }}</strong>
+        <div class="message-actions">
+          <button class="btn edit" (click)="editMessage(message.id); $event.stopPropagation()">Edit</button>
+          <button class="btn delete" (click)="deleteMessage(message.id); $event.stopPropagation()">Delete</button>
+        </div>
       </div>
-      <div class="message-actions">
-        <button class="btn edit" (click)="editMessage(message.id)">Edit</button>
-        <button class="btn delete" (click)="deleteMessage(message.id)">Delete</button>
+
+      <!-- Expanded content -->
+      <div *ngIf="expandedIndex === i" class="message-details">
+        <p><strong>Message:</strong> {{ message.message }}</p>
+        <p><strong>Created:</strong> {{ message.dateCreated }}</p>
+        <p><strong>Last Updated:</strong> {{ message.dateUpdated }}</p>
       </div>
     </li>
   </ul>
