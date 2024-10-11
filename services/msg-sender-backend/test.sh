@@ -74,7 +74,6 @@ docker_ip=$(get_docker_ip)
 BASE_URL="http://${docker_ip}"
 API_URL="${BASE_URL}:${PORT}/api/v1/messages"
 
-
 # Create Message Test
 function test_create_message() {
   print_info "Running Create Message Test"

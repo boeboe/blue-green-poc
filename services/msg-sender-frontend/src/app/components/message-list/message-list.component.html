@@ -1,0 +1,14 @@
+<div>
+  <h2>Messages</h2>
+  <div *ngIf="messages.length === 0">
+    No messages available.
+  </div>
+  
+  <ul *ngIf="messages.length > 0">
+    <li *ngFor="let message of messages">
+      <strong>{{ message.topic }}:</strong> {{ message.message }}
+      <button (click)="editMessage(message.id)">Edit</button>
+      <button (click)="deleteMessage(message.id)">Delete</button>
+    </li>
+  </ul>
+</div>
