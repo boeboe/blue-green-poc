@@ -1,26 +1,52 @@
 <div class="message-list-container">
-  <h2 class="title">Messages</h2>
-  
-  <div *ngIf="messages.length === 0" class="empty-state">
+  <!-- Buttons at the top -->
+  <div class="actions">
+    <button class="new-message-btn" (click)="showNewMessageForm()">New</button>
+    <button class="delete-all-btn" (click)="deleteAllMessages()">Delete All</button>
+  </div>
+
+  <!-- Message list -->
+  <div *ngIf="messages.length === 0">
     No messages available.
   </div>
-  
-  <ul *ngIf="messages.length > 0" class="message-list">
-    <li *ngFor="let message of messages; let i = index" class="message-item" [class.expanded]="expandedIndex === i" (click)="toggleExpand(i)">
-      <div class="message-summary">
+
+  <ul *ngIf="messages.length > 0">
+    <li *ngFor="let message of messages" class="message-row" (click)="toggleMessageDetails(message.id)">
+      <div class="message-header">
         <strong>{{ message.topic }}</strong>
         <div class="message-actions">
-          <button class="btn edit" (click)="editMessage(message.id); $event.stopPropagation()">Edit</button>
-          <button class="btn delete" (click)="deleteMessage(message.id); $event.stopPropagation()">Delete</button>
+          <button (click)="editMessage(message); $event.stopPropagation()">Edit</button>
+          <button (click)="deleteMessage(message.id); $event.stopPropagation()">Delete</button>
         </div>
       </div>
 
-      <!-- Expanded content -->
-      <div *ngIf="expandedIndex === i" class="message-details">
+      <!-- Expanded details -->
+      <div *ngIf="expandedMessageId === message.id" class="message-details">
         <p><strong>Message:</strong> {{ message.message }}</p>
         <p><strong>Created:</strong> {{ message.dateCreated }}</p>
-        <p><strong>Last Updated:</strong> {{ message.dateUpdated }}</p>
+        <p><strong>Last updated:</strong> {{ message.dateUpdated }}</p>
       </div>
     </li>
   </ul>
+
+  <!-- Buttons at the bottom -->
+  <div class="actions">
+    <button class="new-message-btn" (click)="showNewMessageForm()">New</button>
+    <button class="delete-all-btn" (click)="deleteAllMessages()">Delete All</button>
+  </div>
+
+  <!-- Modal for creating/editing a message -->
+  <div *ngIf="isNewMessageFormVisible" class="modal">
+    <div class="modal-content">
+      <h2>{{ isEditMode ? 'Edit Message' : 'Create New Message' }}</h2>
+      <label for="topic">Topic:</label>
+      <input id="topic" [(ngModel)]="newMessageTopic" />
+      <label for="message">Message:</label>
+      <textarea id="message" [(ngModel)]="newMessageContent"></textarea>
+      <div class="modal-actions">
+        <button (click)="saveNewMessage()">{{ isEditMode ? 'Save Changes' : 'Save' }}</button>
+        <button (click)="closeNewMessageForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
