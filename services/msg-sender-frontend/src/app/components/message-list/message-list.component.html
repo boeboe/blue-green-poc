@@ -1,14 +1,19 @@
-<div>
-  <h2>Messages</h2>
-  <div *ngIf="messages.length === 0">
+<div class="message-list-container">
+  <h2 class="title">Messages</h2>
+  
+  <div *ngIf="messages.length === 0" class="empty-state">
     No messages available.
   </div>
   
-  <ul *ngIf="messages.length > 0">
-    <li *ngFor="let message of messages">
-      <strong>{{ message.topic }}:</strong> {{ message.message }}
-      <button (click)="editMessage(message.id)">Edit</button>
-      <button (click)="deleteMessage(message.id)">Delete</button>
+  <ul *ngIf="messages.length > 0" class="message-list">
+    <li *ngFor="let message of messages" class="message-item">
+      <div class="message-content">
+        <strong>{{ message.topic }}:</strong> {{ message.message }}
+      </div>
+      <div class="message-actions">
+        <button class="btn edit" (click)="editMessage(message.id)">Edit</button>
+        <button class="btn delete" (click)="deleteMessage(message.id)">Delete</button>
+      </div>
     </li>
   </ul>
 </div>

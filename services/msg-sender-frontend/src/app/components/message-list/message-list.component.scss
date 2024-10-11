@@ -1,0 +1,94 @@
+// Define some color variables
+$primary-color: #007bff;
+$danger-color: #dc3545;
+$bg-light: #f8f9fa;
+$font-family: 'Inter', sans-serif;
+
+.message-list-container {
+  padding: 2rem;
+  font-family: $font-family;
+  background-color: $bg-light;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-state {
+    font-size: 1.25rem;
+    color: #6c757d;
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .message-list {
+    list-style: none;
+    padding: 0;
+    
+    .message-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+      
+      .message-content {
+        font-size: 1.125rem;
+        color: #495057;
+
+        strong {
+          color: #343a40;
+        }
+      }
+
+      .message-actions {
+        display: flex;
+        gap: 1rem;
+
+        .btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &.edit {
+            background-color: $primary-color;
+            color: #fff;
+
+            &:hover {
+              background-color: darken($primary-color, 10%);
+            }
+          }
+
+          &.delete {
+            background-color: $danger-color;
+            color: #fff;
+
+            &:hover {
+              background-color: darken($danger-color, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+}
