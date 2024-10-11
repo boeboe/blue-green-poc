@@ -71,6 +71,20 @@ export class MessageListComponent implements OnInit {
     this.isNewMessageFormVisible = true;
   }
 
+  // Refresh the message list
+  refreshMessages(): void {
+    console.log('Refreshing the message list...');
+    this.messageService.getMessages().subscribe({
+      next: (data) => {
+        this.messages = data;
+        console.log('Messages successfully refreshed', this.messages);
+      },
+      error: (error) => {
+        console.error('Error refreshing messages', error);
+      }
+    });
+  }
+
   closeNewMessageForm(): void {
     this.isNewMessageFormVisible = false;
     this.newMessageTopic = '';
