@@ -12,7 +12,7 @@ help: ## This help
 ##### Setup #####
 #################
 
-.PHONY: up-kind install-istio up down monitoring info reset clean
+.PHONY: up-kind install-istio up down monitoring info reset clean docker-build docker-compose-up docker-compose-down docker-compose-restart docker-clean
 
 reset: down up ## Reset the kind cluster and Istio installation
 up: up-kind install-istio ## Spin up a kind cluster and install/upgrade Istio
@@ -35,8 +35,33 @@ info: ## Print kind cluster information and kubectl info
 clean: ## Clean all temporary artifacts
 	rm -rf ./output/*
 
-######################
-##### Scenarios ######
-######################
+#####################
+##### Services ######
+#####################
 
+DOCKER_REGISTRY=boeboe
+VERSION=1.0.0
+PLATFORMS=linux/amd64,linux/arm64  # Multi-platform target
+
+docker-build: ## Build both front-end and back-end Docker images with multi-platform support
+	@echo "Building Docker images for front-end and back-end with multi-platform support..."
+	docker buildx build --platform $(PLATFORMS) --push -t $(DOCKER_REGISTRY)/message-frontend:$(VERSION) ./services/msg-sender-frontend
+	docker buildx build --platform $(PLATFORMS) --push -t $(DOCKER_REGISTRY)/message-backend:$(VERSION) ./services/msg-sender-backend
+
+docker-compose-up: ## Start both front-end and back-end using Docker Compose
+	@echo "Starting front-end and back-end services with Docker Compose..."
+	docker-compose up -d
+
+docker-compose-down: ## Stop the Docker Compose services
+	@echo "Stopping Docker Compose services..."
+	docker-compose down
+
+docker-compose-restart: ## Restart Docker Compose services
+	@echo "Restarting Docker Compose services..."
+	docker-compose down
+	docker-compose up -d
+
+docker-clean: ## Clean up Docker resources
+	@echo "Cleaning up Docker images and containers..."
+	docker-compose down --rmi all
 

@@ -1,0 +1,27 @@
+services:
+  message-backend:
+    image: boeboe/message-backend:1.0.0
+    build:
+      context: ./services/msg-sender-backend
+      dockerfile: Dockerfile
+    container_name: message-backend
+    ports:
+      - "8080:80"
+    networks:
+      - message-network
+
+  message-frontend:
+    image: boeboe/message-frontend:1.0.0
+    build:
+      context: ./services/msg-sender-frontend
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_URL=http://message-backend:80
+    ports:
+      - "80:80"
+    networks:
+      - message-network
+
+networks:
+  message-network:
+    driver: bridge
