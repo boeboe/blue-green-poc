@@ -3,6 +3,7 @@
 ## Overview
 
 This project provides a Proof of Concept (PoC) for blue green deployments of an application containing:
+
 	- an angular frontend
 	- a spring boot REST backend
 	- event queues (WIP)
