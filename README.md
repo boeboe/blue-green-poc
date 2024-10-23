@@ -2,7 +2,10 @@
 
 ## Overview
 
-This project provides a Proof of Concept (PoC) for blue green deployments for REST and Event/Command based microservices.
+This project provides a Proof of Concept (PoC) for blue green deployments of an application containing:
+	- an angular frontend
+	- a spring boot REST backend
+	- event queues (WIP)
 
 ## Prerequisites
 
@@ -26,4 +29,9 @@ down                           Destroy the kind cluster
 monitoring                     Install Prometheus and Grafana using Helm
 info                           Print kind cluster information and kubectl info
 clean                          Clean all temporary artifacts
+docker-build                   Build both front-end and back-end Docker images with multi-platform support
+docker-compose-up              Start both front-end and back-end using Docker Compose
+docker-compose-down            Stop the Docker Compose services
+docker-compose-restart         Restart Docker Compose services
+docker-clean                   Clean up Docker resources
 ```
